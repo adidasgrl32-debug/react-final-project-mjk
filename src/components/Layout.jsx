@@ -1,8 +1,7 @@
 import React from 'react';
 
-const Layout = () => {
-  let currentMovies = [];
-  
+const Layout = ({ currentMovies }) => {
+ 
   return (
   <div>
       <div className="controls">
@@ -11,7 +10,7 @@ const Layout = () => {
         <div className="sort__container">
           <label for="sortSelect">Sort:</label>
             <select id="sortSelect">
-              <option value="" disabled selected>Sort</option>    
+              <option value="default">Default</option>    
               <option value="a to z">A to Z</option>
               <option value="z to a">Z to A</option>
               <option value="newest">Newest</option>

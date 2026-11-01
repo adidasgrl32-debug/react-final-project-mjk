@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import fesLogo from '../assets/fes-logo (1).png';
+import fesLogo from '../assets/fes-logo (3).png';
 
 const API_KEY = '7fb7e6c5';
 
-const Nav = ({ setSearchData, setLoading }) => {
+const Nav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentSearchTerm, setCurrentSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [searchData, setSearchData] = useState([]);
 
   async function fetchMovies(query) {
     setLoading(true);

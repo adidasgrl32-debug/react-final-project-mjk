@@ -2,6 +2,10 @@ import React from 'react';
 import Layout from '../components/Layout';
 
 const Home = () => {
+  const moviesGrid = document.getElementById('moviesGrid');
+  const sortSelect = document.getElementById('sortSelect');
+  const currentMovies = [];
+
   const displayMovies = (movies) => {
   if (!moviesGrid || !Array.isArray(movies)) return;
 
