@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import MovieDetails from './pages/MovieDetails';
@@ -54,8 +53,7 @@ function sortMovies(sortType, movies) {
       <div className="App">
         <Nav />
         <Routes>
-          <Route path="/" exact element={<Home />}></Route>
-          <Route path="/searchmovies" exact element={<SearchMovies sortMovies={sortMovies} />}></Route>
+          <Route path="/" exact element={<SearchMovies sortMovies={sortMovies} />}></Route>
           <Route path="/moviedetails/:id" element={<MovieDetails />}></Route>
         </Routes>
         <Footer />

@@ -1,8 +1,9 @@
 import React  from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import fesLogo from '../assets/fes-logo (3).png';
 
 const Nav = () => {
+  const navigate = useNavigate();
 
   return (
     <nav>
@@ -14,11 +15,17 @@ const Nav = () => {
           <span>Simplified</span> Flix
         </div>
       </div>
-      <form className="search-form" id="searchForm" name="searchForm">
+      <form className="search-form" id="searchForm" name="searchForm"
+         onSubmit={(event) => {
+          event.preventDefault();
+          const query = new FormData(event.currentTarget).get('q').trim();
+          if (query) navigate(`/searchmovies?q=${encodeURIComponent(query)}`);
+        }}>
         <div className="search-form__group">
           <input className="search-form__input"
             type="text"
             id="searchInput"
+            name="q"
             placeholder="Search movies..."
             required
           />
