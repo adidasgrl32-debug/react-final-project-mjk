@@ -3,19 +3,75 @@ import Home from './pages/Home';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import MovieDetails from './pages/MovieDetails';
-import MovieCard from './pages/MovieCard';
+import SearchMovies from './pages/SearchMovies';
 
 
 function App() {
+  const moviesGrid = document.getElementById('moviesGrid');
+  const sortSelect = document.getElementById('sortSelect');
+  const currentMovies = [];
+
+  const displayMovies = (movies) => {
+  if (!moviesGrid || !Array.isArray(movies)) return;
+
+  const movieResults = movies
+    .map((movie) => {
+      const poster = movie.Poster !== "N/A" ? movie.Poster : "";
+
+      return `<div class="movie-card">
+      ${poster ? `<img class="movie-card__img" src="${poster}" alt="${movie.Title}" />` : '<div class="movie-card__poster-placeholder">No Image</div>'}
+      <h2 class="movie-card__title">${movie.Title}</h2>
+      <p class="movie-card__year">${movie.Year}</p>
+    </div>
+  `;
+    })
+    .join("");
+
+  moviesGrid.innerHTML = movieResults;
+};
+
+if (sortSelect) {
+  sortSelect.addEventListener("change", (event) => {
+    sortMovies(event.target.value);
+  });
+}
+
+function sortMovies(sortType) {
+  let sortedMovies = [...currentMovies];
+
+  if (sortType === "default") {
+    return displayMovies(sortedMovies);
+  }
+
+  if (sortType === "a to z") {
+    sortedMovies.sort((a, b) => a.Title.localeCompare(b.Title));
+  } else if (sortType === "z to a") {
+    sortedMovies.sort((a, b) => b.Title.localeCompare(a.Title));
+  } else if (sortType === "newest") {
+    sortedMovies.sort((a, b) => Number(b.Year) - Number(a.Year));
+  } else if (sortType === "oldest") {
+    sortedMovies.sort((a, b) => Number(a.Year) - Number(b.Year));
+  }
+
+  return displayMovies(sortedMovies);
+}
+
+function filterMovies(event) {
+  const searchTerm = event.target.value.toLowerCase();
+  const filteredMovies = currentMovies.filter((movie) =>
+    movie.Title.toLowerCase().includes(searchTerm),
+  );
+  displayMovies(filteredMovies);
+}
  
   return (
     <Router>
       <div className="App">
         <Nav />
         <Routes>
-          <Route path="/?" exact element={<Home />}></Route>
-          <Route path="/movies/:id" element={<MovieDetails />}></Route>
-          <Route path="/movies" element={<MovieCard />}></Route>
+          <Route path="/" exact element={<Home />}></Route>
+          <Route path="/searchmovies" exact element={<SearchMovies searchmovies={SearchMovies} />}></Route>
+          <Route path="/moviedetails/:id" element={<MovieDetails />}></Route>
         </Routes>
         <Footer />
       </div>

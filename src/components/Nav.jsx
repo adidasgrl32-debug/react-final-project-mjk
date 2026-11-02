@@ -1,46 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import fesLogo from '../assets/fes-logo (3).png';
 
-const API_KEY = '7fb7e6c5';
-
 const Nav = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [currentSearchTerm, setCurrentSearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [searchData, setSearchData] = useState([]);
-
-  async function fetchMovies(query) {
-    setLoading(true);
-    try {
-      const { data } = await axios.get(
-        `https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(query)}`
-      );
-      setSearchData(data.Search || []);
-    } catch (error) {
-      setSearchData([]);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const query = new FormData(event.currentTarget).get('searchInput')?.toString().trim();
-    if (!query) return;
-
-    setCurrentSearchTerm(query);
-    fetchMovies(query);
-    if (location.pathname !== '/') {
-      navigate('/');
-    }
-  }
-
-    useEffect(() => {
-      fetchMovies('Despicable Me');
-    }, []);
 
   return (
     <nav>
