@@ -1,32 +1,7 @@
 import React from 'react';
 
 const Home = () => {
-  const moviesGrid = document.getElementById('moviesGrid');
-  const currentMovies = [];
-
-  const displayMovies = (movies) => {
-  if (!moviesGrid || !Array.isArray(movies)) return;
-  }
-
-  function sortMovies(sortType) {
-    let sortedMovies = [...currentMovies];
-
-  if (sortType === "default") {
-    return displayMovies(sortedMovies);
-  }
-
-  if (sortType === "a to z") {
-    sortedMovies.sort((a, b) => a.Title.localeCompare(b.Title));
-  } else if (sortType === "z to a") {
-    sortedMovies.sort((a, b) => b.Title.localeCompare(a.Title));
-  } else if (sortType === "newest") {
-    sortedMovies.sort((a, b) => Number(b.Year) - Number(a.Year));
-  } else if (sortType === "oldest") {
-    sortedMovies.sort((a, b) => Number(a.Year) - Number(b.Year));
-  }
-
-  return displayMovies(sortedMovies);
-  }
+  
 	return (
   <>
   <div>
@@ -34,7 +9,7 @@ const Home = () => {
         <p id="resultsInfo" className="resultsInfo"></p>      
         <p id="resultsCount" className="resultsCount"></p>
         <div className="sort__container">
-          <label for="sortSelect">Sort:</label>
+          <label htmlFor="sortSelect">Sort:</label>
             <select id="sortSelect">
               <option value="default">Default</option>    
               <option value="a to z">A to Z</option>

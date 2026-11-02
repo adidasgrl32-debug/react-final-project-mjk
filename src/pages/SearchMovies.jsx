@@ -1,71 +1,94 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const API_KEY = '7fb7e6c5';
 
-const SearchMovies = () => {
+const Skeletons = () => (
+  Array.from({ length: 10 }, (_, index) => (
+    <div key={index} className="movie-card--skeleton">
+      <div className="movie-card__img--skeleton" />
+      <div className="movie-card__title--skeleton" />
+      <p className="movie-card__year--skeleton" />
+    </div>
+  ))
+);
+
+const MovieData = ({ movies }) => {
+  if (!movies || movies.length === 0) {
+    return <p className="no-results">No movies found.</p>;
+  }
+
+  return movies.map((movie) => {
+    const poster = movie.Poster && movie.Poster !== 'N/A' ? movie.Poster : '';
+
+    return (
+      <Link className="movie-card" to={`/moviedetails/${movie.imdbID}`} key={movie.imdbID || `${movie.Title}-${movie.Year}`}>
+        {poster ? (
+          <img className="movie-card__img" src={poster} alt={movie.Title} />
+        ) : (
+          <div className="movie-card__poster-placeholder">No Image</div>
+        )}
+        <h2 className="movie-card__title">{movie.Title}</h2>
+        <p className="movie-card__year">{movie.Year}</p>
+      </Link>
+    );
+  });
+};
+
+const SearchMovies = ({ sortMovies }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentSearchTerm, setCurrentSearchTerm] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchData, setSearchData] = useState([]);
+  const [sortType, setSortType] = useState('default');
 
   function handleSubmit(event) {
     event.preventDefault();
     const query = new FormData(event.currentTarget).get('searchInput')?.toString().trim();
     if (!query) return;
 
-    setCurrentSearchTerm(query);
-    fetchMovies(query);
-    if (location.pathname !== '/') {
-      navigate('/');
-    }
+    navigate(`/searchmovies?q=${encodeURIComponent(query)}`);
   }
 
     useEffect(() => {
-      fetchMovies('Despicable Me');
-    }, []);
+      const query = new URLSearchParams(location.search).get('q') || 'Despicable Me';
+      setCurrentSearchTerm(query);
+      fetchMovies(query);
+    }, [location.search]);
 
    async function fetchMovies(query) {
     setLoading(true);
-    try {
-      const { data } = await axios.get(
-        `https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(query)}`
-      );
-      setSearchData(data.Search || []);
-    } catch (error) {
-      setSearchData([]);
-    } finally {
-      setLoading(false);
-    }
+    const { data } = await axios.get(
+      `https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(query)}`
+    );
+    setSearchData(data.Search || []);
+    setLoading(false);
   }
 
   return (
     <>
-  <form class="search-form" id="searchForm" onSubmit={handleSubmit}>
-    <div class="search-form__group">
+  <form className="search-form" id="movieSearchForm" onSubmit={handleSubmit}>
+    <div className="search-form__group">
           <input
-            class="search-form__input" type="text" id="searchInput" placeholder="Search movies..."
+            className="search-form__input" type="text" id="movieSearchInput" name="searchInput" placeholder="Search movies..."
             required/>
-          <button class="search-form__button" type="submit" aria-label="Search">
-            <svg class="search-form__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round"stroke-linejoin="round">
+          <button className="search-form__button" type="submit" aria-label="Search">
+            <svg className="search-form__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+              strokeLinecap="round"strokeLinejoin="round">
               <circle cx="11" cy="11" r="7"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </button>
         </div>
   </form>
-    <div class="currentMovies">
-      <i class="fas fa-spinner movies__loading--spinner"></i>
-    </div>
       <div className="controls">
-        <p id="resultsInfo" className="resultsInfo"></p>
-        <p id="resultsCount" className="resultsCount"></p>
+        <p id="resultsInfo" className="resultsInfo">{currentSearchTerm}</p>
+        <p id="resultsCount" className="resultsCount">{loading ? 'Loading...' : searchData.length + ' movies'}</p>
         <div>
           <label htmlFor="sortSelect">Sort:</label>
-            <select id="sortSelect">
+            <select id="sortSelect" value={sortType} onChange={(event) => setSortType(event.target.value)}>
               <option value="default">Default</option>
               <option value="a to z">A to Z</option>
               <option value="z to a">Z to A</option>
@@ -73,6 +96,9 @@ const SearchMovies = () => {
             <option value="oldest">Oldest</option>
           </select>
         </div>
+   </div>
+   <div className="movies-grid" id="moviesGrid">
+     {loading ? <Skeletons /> : <MovieData movies={sortMovies(sortType, searchData)} />}
    </div>
     </>
   );

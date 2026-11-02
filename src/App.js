@@ -8,7 +8,6 @@ import SearchMovies from './pages/SearchMovies';
 
 function App() {
   const moviesGrid = document.getElementById('moviesGrid');
-  const sortSelect = document.getElementById('sortSelect');
   const currentMovies = [];
 
   const displayMovies = (movies) => {
@@ -30,17 +29,11 @@ function App() {
   moviesGrid.innerHTML = movieResults;
 };
 
-if (sortSelect) {
-  sortSelect.addEventListener("change", (event) => {
-    sortMovies(event.target.value);
-  });
-}
-
-function sortMovies(sortType) {
-  let sortedMovies = [...currentMovies];
+function sortMovies(sortType, movies) {
+  let sortedMovies = [...movies];
 
   if (sortType === "default") {
-    return displayMovies(sortedMovies);
+    return sortedMovies;
   }
 
   if (sortType === "a to z") {
@@ -48,20 +41,12 @@ function sortMovies(sortType) {
   } else if (sortType === "z to a") {
     sortedMovies.sort((a, b) => b.Title.localeCompare(a.Title));
   } else if (sortType === "newest") {
-    sortedMovies.sort((a, b) => Number(b.Year) - Number(a.Year));
+    sortedMovies.sort((a, b) => parseInt(b.Year) - parseInt(a.Year));
   } else if (sortType === "oldest") {
-    sortedMovies.sort((a, b) => Number(a.Year) - Number(b.Year));
+    sortedMovies.sort((a, b) => parseInt(a.Year) - parseInt(b.Year));
   }
 
-  return displayMovies(sortedMovies);
-}
-
-function filterMovies(event) {
-  const searchTerm = event.target.value.toLowerCase();
-  const filteredMovies = currentMovies.filter((movie) =>
-    movie.Title.toLowerCase().includes(searchTerm),
-  );
-  displayMovies(filteredMovies);
+  return sortedMovies;
 }
  
   return (
@@ -70,7 +55,7 @@ function filterMovies(event) {
         <Nav />
         <Routes>
           <Route path="/" exact element={<Home />}></Route>
-          <Route path="/searchmovies" exact element={<SearchMovies searchmovies={SearchMovies} />}></Route>
+          <Route path="/searchmovies" exact element={<SearchMovies sortMovies={sortMovies} />}></Route>
           <Route path="/moviedetails/:id" element={<MovieDetails />}></Route>
         </Routes>
         <Footer />
