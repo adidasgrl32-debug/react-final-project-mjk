@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const API_KEY = '7fb7e6c5';
@@ -37,20 +37,11 @@ const MovieData = ({ movies }) => {
 };
 
 const SearchMovies = ({ sortMovies }) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [currentSearchTerm, setCurrentSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [searchData, setSearchData] = useState([]);
   const [sortType, setSortType] = useState('default');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const query = new FormData(event.currentTarget).get('searchInput')?.toString().trim();
-    if (!query) return;
-
-    navigate(`/searchmovies?q=${encodeURIComponent(query)}`);
-  }
 
     useEffect(() => {
       const query = new URLSearchParams(location.search).get('q') || 'Despicable Me';
@@ -69,23 +60,9 @@ const SearchMovies = ({ sortMovies }) => {
 
   return (
     <>
-  <form className="search-form" id="movieSearchForm" onSubmit={handleSubmit}>
-    <div className="search-form__group">
-          <input
-            className="search-form__input" type="text" id="movieSearchInput" name="searchInput" placeholder="Search movies..."
-            required/>
-          <button className="search-form__button" type="submit" aria-label="Search">
-            <svg className="search-form__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round"strokeLinejoin="round">
-              <circle cx="11" cy="11" r="7"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </button>
-        </div>
-  </form>
       <div className="controls">
-        <p id="resultsInfo" className="resultsInfo">{currentSearchTerm}</p>
-        <p id="resultsCount" className="resultsCount">{loading ? 'Loading...' : searchData.length + ' movies'}</p>
+        <p id="resultsInfo" className="resultsInfo">Showing: {currentSearchTerm}</p>
+        <p id="resultsCount" className="resultsCount"></p>
         <div>
           <label htmlFor="sortSelect">Sort:</label>
             <select id="sortSelect" value={sortType} onChange={(event) => setSortType(event.target.value)}>

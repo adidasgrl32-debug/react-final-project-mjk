@@ -4,7 +4,6 @@ import Footer from './components/Footer';
 import MovieDetails from './pages/MovieDetails';
 import SearchMovies from './pages/SearchMovies';
 
-
 function App() {
   const moviesGrid = document.getElementById('moviesGrid');
   const currentMovies = [];
@@ -53,8 +52,12 @@ function sortMovies(sortType, movies) {
       <div className="App">
         <Nav />
         <Routes>
-          <Route path="/" exact element={<SearchMovies sortMovies={sortMovies} />}></Route>
+          <Route path="/" exact element={<SearchMovies sortMovies={sortMovies} 
+          currentMovies={currentMovies} 
+          displayMovies={displayMovies}
+          />}></Route>
           <Route path="/moviedetails/:id" element={<MovieDetails />}></Route>
+          <Route path="/searchmovies" element={<SearchMovies sortMovies={sortMovies} />} />
         </Routes>
         <Footer />
       </div>

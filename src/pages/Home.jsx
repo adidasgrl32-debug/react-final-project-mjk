@@ -82,10 +82,10 @@ const Home = () => {
         </div>
       <div className="movie-card">
         <div className="movie-card__poster-placeholder">
-          Game Poster<br/>Not Available </div>
         <h2 className="movie-card__title">Despicable Me</h2>
         <p className="movie-card__year">2010</p>
         </div>
+      </div>
           <div className="movie-card">
       <img
         className="movie-card__img"

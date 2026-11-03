@@ -1,24 +1,17 @@
 import React from 'react';
 
-const MovieCard = ({ movie }) => {
-  if (!movie) {
-    return null;
-  }
+const MovieCard = () => {
 
   return (
-    <div id="movieDetails" className="movieDetails">
-      <div className="movieDetails__poster">
-        <img
-          className="movieDetails__poster-img"
-          src={movie.Poster !== 'N/A' ? movie.Poster : 'https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(query)}'}
-          alt={movie.Title}
-        />
-      </div>
-      <div className="movieDetails__info">
-        <h3>{movie.Title}</h3>
-        <p>{movie.Year}</p>
-      </div>
-    </div>
+    <div className="movie-card">
+          <img
+            className="movie-card__img"
+            src=""
+            alt=""
+          />
+          <h2 className="movie-card__title">Title</h2>
+          <p className="movie-card__year">Year</p>
+        </div>
   );
 };
 
