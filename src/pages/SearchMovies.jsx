@@ -25,9 +25,9 @@ const MovieData = ({ movies }) => {
     return (
       <Link className="movie-card" to={`/moviedetails/${movie.imdbID}`} key={movie.imdbID || `${movie.Title}-${movie.Year}`}>
         {poster ? (
-          <img className="movie-card__img" src={poster} alt={movie.Title} />
+          <img className="movie-card__img" src={poster} alt=""/>
         ) : (
-          <div className="movie-card__poster-placeholder">No Image</div>
+          <div className="movie-card__poster-placeholder">Movie Poster Not Available</div>
         )}
         <h2 className="movie-card__title">{movie.Title}</h2>
         <p className="movie-card__year">{movie.Year}</p>

@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
 
 const API_KEY = '7fb7e6c5';
 
-const MovieDetails = ({ movie }) => {
+const MovieDetails = () => {
   const [loading, setLoading] = useState(false);
   const [movieDetails, setMovieDetails] = useState([]);
-  const [movies, setMovies] = useState([]);
-  const [imdbId, setImdbId] = useState('');
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
 
-  const getMovieDetails = async () => {
-  const url = `http://www.omdbapi.com/?i=${imdbId}&apikey=${API_KEY}`;
+const getMovieDetails = async () => {
+  const response = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`);
+  const data = await response.json();
+  setMovie(data);
+};
 
-    const response = await fetch(url);
-    const responseJson = await response.json();
-    
-    console.log(responseJson);
-    setMovies(responseJson.MovieDetails)
+useEffect(() => {
+  getMovieDetails();
+}, [id]);
+
+ if (!movie) {
+    return <div>Loading movie details...</div>
   }
-
-    useEffect(() => {
-    getMovieDetails();
-  }, [imdbId]);
 
 return (
     <>
@@ -31,18 +30,18 @@ return (
           <Link to="/">← Back</Link>
           <div className="movie-details__back">
           </div>
-      {loading 
-        ? new Array(10).fill(0).map((_, index) => (
-      <div className="movie-details" key={index}>
-        <div className="movie-details__title">
-          <div className="movie-details__title--skeleton"></div>
-        </div>
-        <div className="movie-details__body">
-          <p className="movie-details__body--skeleton"></p>
-        </div>
-    </div>
-      ))
-      : movieDetails.map(movie => (
+      {loading ? (
+        new Array(10).fill(0).map((_, index) => (
+          <div className="movie-details" key={index}>
+            <div className="movie-details__title">
+              <div className="movie-details__title--skeleton"></div>
+            </div>
+            <div className="movie-details__body">
+              <p className="movie-details__body--skeleton"></p>
+            </div>
+          </div>
+        ))
+            ) : movieDetails.map(movie => (
         <div className="movie.details" key={movie.id}>
            <div className="movie-details" key={movie.id}></div>
              <p className="movie-details__title">{movie.title}</p>
@@ -56,41 +55,41 @@ return (
               />
             </div>
             <div className="movie-details__info">
-              <h1 className="movie-details__title" key={movie?.Title}>
+              <h1 className="movie-details__title">{movie.title}
               </h1>
-              <p className="movie-details__year">Year: 2010</p>
+              <p className="movie-details__year">{movie.year}</p>
               <p className="movie-details__rating">
-                Rating: 7.6/10
+                {movie.rating}
               </p>
               <p className="movie-details__released">
-                Released: 2010
+                {movie.released}
               </p>
             </div>
           </div>
           <div className="movie-details__text--wrappter">
             <div className="movie-details__detail">
               <h3>Genre</h3>
-              <p>Genre: Animation, Adventure, Comedy</p>
+              <p>{movie.genre}</p>
             </div>
             <div className="movie-details__detail">
               <h3>Writer</h3>
-              <p>Writer: Cinco Paul, Ken Daurio, Sergio Pablos</p>
+              <p>{movie.writer}</p>
             </div>
             <div className="movie-details__detail">
               <h3>Actors</h3>
-              <p>Actors: Steve Carell, Jason Segel, Russell Brand </p>
+              <p>{movie.actors} </p>
             </div>
             <div className="movie-details__detail">
               <h3>Plot</h3>
-              <p>Plot: Gru, a criminal mastermind, adopts three orphans as pawns to carry out the biggest heist in history. His life takes an unexpected turn when the little girls see the evildoer as their potential father.</p>
+              <p>{movie.plot}</p>
             </div>
             <div className="movie-details__detail">
               <h3>Language</h3>
-              <p>Language: English</p>
+              <p>{movie.language}</p>
             </div>
             <div className="movie-details__detail">
               <h3>Awards</h3>
-              <p>Awards: Nominated for 1 BAFTA Award. 3 wins & 41 nominations total</p>
+              <p>{movie.awards}</p>
             </div>
           </div>
         </div>

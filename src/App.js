@@ -56,7 +56,7 @@ function sortMovies(sortType, movies) {
           currentMovies={currentMovies} 
           displayMovies={displayMovies}
           />}></Route>
-          <Route path="/moviedetails/:id" element={<MovieDetails />}></Route>
+          <Route path="/moviedetails/:id" exact element={<MovieDetails />}></Route>
           <Route path="/searchmovies" element={<SearchMovies sortMovies={sortMovies} />} />
         </Routes>
         <Footer />
