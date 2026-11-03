@@ -5,11 +5,21 @@ import fesLogo from '../assets/fes-logo (3).png';
 const Nav = () => {
   const navigate = useNavigate();
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   return (
     <nav>
       <div className="logo">
         <Link to="/" className="logo__link" aria-label="Home">
-          <img src={fesLogo} alt="" className="logo__img" width="50px" />
+          <img 
+            src={fesLogo} 
+            alt="Company Logo" 
+            onClick={handleLogoClick} 
+            style={{ cursor: 'pointer' }}
+            className="logo__img" 
+            width="50px" />
         </Link>
         <div className="logo__title">
           <span>Simplified</span> Flix
