@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import PosterImage from '../components/PosterImage';
 
 const API_KEY = '7fb7e6c5';
 
@@ -34,17 +35,12 @@ return (
           </div>
           <div className="movie-details__content">
             <div className="movie-details__poster--wrapper">
-              {movie.Poster && movie.Poster !== 'N/A' ? (
-                <img
-                  className="movie-details__poster"
-                  src={movie.Poster}
-                  alt={movie.Title}
-                />
-              ) : (
-              <div className="movie-details__poster-placeholder">
-                Movie Poster Not Available
-              </div>
-              )}
+             <PosterImage
+              src={movie.Poster !== 'N/A' ? movie.Poster : ''}
+              alt={`${movie.Title} poster`}
+              className="movie-card__img"
+              placeholderClassName="movie-card__poster-placeholder"
+            />
             </div>
             <div className="movie-details__info">
               <h1 className="movie-details__title">{movie.Title}

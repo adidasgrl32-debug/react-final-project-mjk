@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import PosterImage from '../components/PosterImage';
 
 const API_KEY = '7fb7e6c5';
 
@@ -23,12 +24,14 @@ const MovieData = ({ movies }) => {
     const poster = movie.Poster && movie.Poster !== 'N/A' ? movie.Poster : '';
 
     return (
-      <Link className="movie-card" to={`/moviedetails/${movie.imdbID}`} key={movie.imdbID || `${movie.Title}-${movie.Year}`}>
-        {poster ? (
-          <img className="movie-card__img" src={poster} alt=""/>
-        ) : (
-          <div className="movie-card__poster-placeholder">Movie Poster Not Available</div>
-        )}
+      <Link className="movie-card" to={`/moviedetails/${movie.imdbID}`}>
+        <PosterImage
+          src={poster}
+          alt={`${movie.Title} poster`}
+          className="movie-card__img"
+
+          placeholderClassName="movie-card__poster-placeholder"
+          />
         <h2 className="movie-card__title">{movie.Title}</h2>
         <p className="movie-card__year">{movie.Year}</p>
       </Link>
