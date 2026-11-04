@@ -8,13 +8,14 @@ const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
 
-const getMovieDetails = async () => {
-  const response = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`);
-  const data = await response.json();
-  setMovie(data);
-};
 
 useEffect(() => {
+  const getMovieDetails = async () => {
+    const response = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`);
+    const data = await response.json();
+    setMovie(data);
+  };
+
   getMovieDetails();
 }, [id]);
 
